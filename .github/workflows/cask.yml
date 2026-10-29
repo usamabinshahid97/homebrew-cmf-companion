@@ -1,14 +1,14 @@
-name: Cask checks
+name: Legacy tap migration
 
 on:
   push:
     branches: [main]
     paths:
-      - Casks/**
+      - tap_migrations.json
       - .github/workflows/cask.yml
   pull_request:
     paths:
-      - Casks/**
+      - tap_migrations.json
       - .github/workflows/cask.yml
   workflow_dispatch:
 
@@ -32,17 +32,11 @@ jobs:
           test "$(uname -m)" = arm64
           brew update
           brew tap usamabinshahid97/cmf-companion "$GITHUB_WORKSPACE"
-          if brew commands | grep -qx trust; then
-            brew trust --cask usamabinshahid97/cmf-companion/cmf-companion
-          fi
-      - name: Style
-        run: brew style --cask usamabinshahid97/cmf-companion/cmf-companion
-      - name: Audit
-        run: brew audit --cask --strict --online usamabinshahid97/cmf-companion/cmf-companion
-      - name: Install, verify, and uninstall
+      - name: Install through legacy name, verify, and uninstall
         run: |
           mkdir -p "$RUNNER_TEMP/cmf-apps"
           brew install --yes --cask --appdir="$RUNNER_TEMP/cmf-apps" usamabinshahid97/cmf-companion/cmf-companion
+          brew info --json=v2 --cask cmf-companion | python3 -c 'import json,sys; assert json.load(sys.stdin)["casks"][0]["tap"] == "usamabinshahid97/tap"'
           codesign --verify --deep --strict "$RUNNER_TEMP/cmf-apps/CMF Companion.app"
           xattr -p com.apple.quarantine "$RUNNER_TEMP/cmf-apps/CMF Companion.app"
           brew uninstall --cask cmf-companion
