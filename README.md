@@ -1,5 +1,7 @@
 # CMF Companion for Homebrew
 
+[![Cask checks](https://github.com/usamabinshahid97/homebrew-cmf-companion/actions/workflows/cask.yml/badge.svg)](https://github.com/usamabinshahid97/homebrew-cmf-companion/actions/workflows/cask.yml)
+
 Install [CMF Companion](https://github.com/usamabinshahid97/cmf-companion), an unofficial native macOS menu bar app for **CMF Buds 2 (B179)**.
 
 Requires **Apple Silicon** and **macOS 14 or later**. Liquid Glass is available on macOS 26+; macOS 14–15 use a material fallback. Intel Macs and other earbud models are not supported by this binary.
